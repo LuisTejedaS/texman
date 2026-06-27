@@ -1,138 +1,138 @@
 # Texman
 
-Texman es un cliente HTTP de terminal para trabajar con colecciones de requests en formato JSON. Permite navegar colecciones, ejecutar requests, editar método, URL, headers y body, crear o borrar requests, importar/exportar colecciones y revisar respuestas guardadas.
+Texman is a terminal HTTP client for working with request collections stored as JSON. It lets you browse collections, run requests, edit methods, URLs, headers and bodies, create or delete requests, import/export collections, and review saved responses.
 
-La interfaz está hecha con [Bubble Tea](https://github.com/charmbracelet/bubbletea), así que corre dentro de una terminal interactiva.
+The interface is built with [Bubble Tea](https://github.com/charmbracelet/bubbletea), so it runs inside an interactive terminal.
 
-## Requisitos
+## Requirements
 
-- Go 1.25 o superior
-- Acceso a internet la primera vez que se descargan dependencias
+- Go 1.25 or later
+- Internet access the first time dependencies are downloaded
 
-## Instalación
+## Installation
 
-Desde la raíz del proyecto:
+From the project root:
 
 ```bash
 go mod download
 ```
 
-## Ejecutar en desarrollo
+## Run In Development
 
 ```bash
 go run .
 ```
 
-Texman lee las colecciones desde `./collections` y guarda las respuestas en `./responses`, por eso conviene ejecutarlo desde la raíz del repositorio.
+Texman reads collections from `./collections` and saves responses to `./responses`, so it is best to run it from the repository root.
 
-## Compilar
+## Build
 
-Para compilar el binario local:
+To build a local binary:
 
 ```bash
 go build -o texman .
 ```
 
-Luego ejecútalo con:
+Then run it with:
 
 ```bash
 ./texman
 ```
 
-Para compilar un ejecutable de Windows:
+To build a Windows executable:
 
 ```bash
 GOOS=windows GOARCH=amd64 go build -o texman.exe .
 ```
 
-## Uso
+## Usage
 
-Al abrir la app, la pantalla se divide en:
+When the app opens, the screen is split into:
 
-- `Collections`: lista de colecciones y requests.
-- `Request`: detalle del request seleccionado.
-- `Response`: resultado del último request ejecutado.
+- `Collections`: the list of collections and requests.
+- `Request`: details for the selected request.
+- `Response`: the result of the last executed request.
 
-### Navegación general
+### General Navigation
 
-| Tecla | Acción |
+| Key | Action |
 | --- | --- |
-| `j` / `down` | Mover selección hacia abajo |
-| `k` / `up` | Mover selección hacia arriba |
-| `tab` | Cambiar foco entre sidebar y panel de detalle |
-| `enter` | Ejecutar request seleccionado o expandir/colapsar colección |
-| `space` | Expandir/colapsar colección |
-| `r` | Ejecutar request; si estás sobre una colección, renombrarla |
-| `q` / `ctrl+c` | Salir |
+| `j` / `down` | Move selection down |
+| `k` / `up` | Move selection up |
+| `tab` | Switch focus between the sidebar and detail panel |
+| `enter` | Run the selected request or expand/collapse a collection |
+| `space` | Expand/collapse a collection |
+| `r` | Run a request; when a collection is selected, rename it |
+| `q` / `ctrl+c` | Quit |
 
-Cuando el foco está en el panel de respuesta:
+When the response panel has focus:
 
-| Tecla | Acción |
+| Key | Action |
 | --- | --- |
-| `j` / `down` | Scroll hacia abajo |
-| `k` / `up` | Scroll hacia arriba |
-| `f` / `pgdown` | Avanzar página |
-| `b` / `pgup` | Retroceder página |
+| `j` / `down` | Scroll down |
+| `k` / `up` | Scroll up |
+| `f` / `pgdown` | Page down |
+| `b` / `pgup` | Page up |
 
-### Edición de requests
+### Editing Requests
 
-Selecciona un request y usa:
+Select a request and use:
 
-| Tecla | Acción |
+| Key | Action |
 | --- | --- |
-| `n` | Crear un request nuevo en la colección actual |
-| `m` | Editar método HTTP |
-| `u` | Editar URL |
-| `h` | Editar headers |
-| `e` | Editar body |
-| `d` | Borrar request seleccionado |
+| `n` | Create a new request in the current collection |
+| `m` | Edit the HTTP method |
+| `u` | Edit the URL |
+| `h` | Edit headers |
+| `e` | Edit the body |
+| `d` | Delete the selected request |
 
-Dentro de los editores:
+Inside editors:
 
-| Tecla | Acción |
+| Key | Action |
 | --- | --- |
-| `enter` | Confirmar el paso actual o guardar campos simples |
-| `ctrl+s` | Guardar cambios |
-| `esc` | Cancelar o volver al paso anterior |
+| `enter` | Confirm the current step or save simple fields |
+| `ctrl+s` | Save changes |
+| `esc` | Cancel or go back to the previous step |
 
-En el editor de headers:
+In the header editor:
 
-| Tecla | Acción |
+| Key | Action |
 | --- | --- |
-| `enter` | Editar header seleccionado |
-| `a` | Agregar header |
-| `d` | Borrar header |
-| `ctrl+s` | Guardar todos los headers |
+| `enter` | Edit the selected header |
+| `a` | Add a header |
+| `d` | Delete a header |
+| `ctrl+s` | Save all headers |
 
-### Colecciones
+### Collections
 
-| Tecla | Acción |
+| Key | Action |
 | --- | --- |
-| `C` | Crear colección |
-| `r` | Renombrar colección seleccionada |
-| `D` | Borrar colección seleccionada |
-| `i` | Importar una colección desde un archivo JSON |
-| `x` | Exportar la colección seleccionada a un archivo JSON |
+| `C` | Create a collection |
+| `r` | Rename the selected collection |
+| `D` | Delete the selected collection |
+| `i` | Import a collection from a JSON file |
+| `x` | Export the selected collection to a JSON file |
 
-### Respuestas guardadas
+### Saved Responses
 
-Cada request ejecutado guarda automáticamente una respuesta en `./responses` con el formato:
+Every executed request automatically saves a response in `./responses` using this format:
 
 ```text
-YYYY-MM-DD_HH-MM-SS_nombre-del-request.txt
+YYYY-MM-DD_HH-MM-SS_request-name.txt
 ```
 
-Para ver respuestas guardadas:
+To view saved responses:
 
-| Tecla | Acción |
+| Key | Action |
 | --- | --- |
-| `v` | Cambiar entre colecciones y respuestas guardadas |
-| `enter` | Abrir respuesta seleccionada |
-| `d` | Borrar archivo de respuesta seleccionado |
+| `v` | Switch between collections and saved responses |
+| `enter` | Open the selected response |
+| `d` | Delete the selected response file |
 
-## Formato de colecciones
+## Collection Format
 
-Cada archivo `*.json` dentro de `collections` representa una colección:
+Each `*.json` file inside `collections` represents one collection:
 
 ```json
 {
@@ -151,34 +151,34 @@ Cada archivo `*.json` dentro de `collections` representa una colección:
 }
 ```
 
-Campos de un request:
+Request fields:
 
-- `name`: nombre visible en la lista.
-- `method`: método HTTP, por ejemplo `GET`, `POST`, `PUT`, `PATCH` o `DELETE`.
-- `url`: URL completa del endpoint.
-- `headers`: mapa de headers HTTP.
-- `body`: cuerpo del request como texto.
+- `name`: the name shown in the list.
+- `method`: the HTTP method, for example `GET`, `POST`, `PUT`, `PATCH`, or `DELETE`.
+- `url`: the full endpoint URL.
+- `headers`: a map of HTTP headers.
+- `body`: the request body as text.
 
-## Estructura del proyecto
+## Project Structure
 
 ```text
 .
-├── collections/          # Colecciones HTTP en JSON
-├── responses/            # Respuestas guardadas automáticamente
+├── collections/          # HTTP collections in JSON
+├── responses/            # Automatically saved responses
 ├── internal/
-│   ├── collection/       # Carga y guardado de colecciones
-│   ├── httpclient/       # Ejecución de requests HTTP
-│   ├── model/            # Estado y lógica de Bubble Tea
-│   ├── responses/        # Guardado y listado de respuestas
-│   └── ui/               # Render de paneles y estilos
-├── main.go               # Punto de entrada
+│   ├── collection/       # Collection loading and saving
+│   ├── httpclient/       # HTTP request execution
+│   ├── model/            # Bubble Tea state and logic
+│   ├── responses/        # Response saving and listing
+│   └── ui/               # Panel rendering and styles
+├── main.go               # Entry point
 ├── go.mod
 └── go.sum
 ```
 
-## Notas
+## Notes
 
-- El cliente HTTP usa timeout de 30 segundos.
-- Si la respuesta es JSON válido, Texman la muestra formateada.
-- Los cambios a colecciones se guardan en el archivo JSON correspondiente.
-- Los binarios generados, como `texman` o `texman.exe`, no son necesarios para desarrollar si usas `go run .`.
+- The HTTP client uses a 30-second timeout.
+- If the response is valid JSON, Texman displays it formatted.
+- Collection changes are saved to the corresponding JSON file.
+- Generated binaries, such as `texman` or `texman.exe`, are not required for development if you use `go run .`.
