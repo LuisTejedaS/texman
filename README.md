@@ -4,18 +4,71 @@ Texman is a terminal HTTP client for working with request collections stored as 
 
 The interface is built with [Bubble Tea](https://github.com/charmbracelet/bubbletea), so it runs inside an interactive terminal.
 
+## Install
+
+Every push to `main` publishes two binaries on the [latest GitHub release](https://github.com/LuisTejedaS/texman/releases/latest):
+
+| File | System |
+| --- | --- |
+| `texman-macos-arm64` | macOS on Apple Silicon |
+| `texman-windows-amd64.exe` | 64-bit Windows |
+
+Start Texman from the folder where its data should live. It reads request collections from `./collections` and writes saved responses to `./responses`. Those folders appear when you save a collection or run a request.
+
+### macOS
+
+The release binary targets Apple Silicon (`arm64`). In Terminal:
+
+```bash
+curl -fsSL -o texman https://github.com/LuisTejedaS/texman/releases/latest/download/texman-macos-arm64
+chmod +x texman
+xattr -d com.apple.quarantine texman
+./texman
+```
+
+`xattr` clears the quarantine flag macOS adds to files downloaded from the internet. If Gatekeeper still blocks the app, open **System Settings → Privacy & Security** and choose **Open Anyway**.
+
+To run `texman` from any directory, move it onto your `PATH`:
+
+```bash
+sudo mv texman /usr/local/bin/texman
+```
+
+Then change to the folder that should hold `collections` and `responses`, and start it:
+
+```bash
+cd /path/to/your/texman-data
+texman
+```
+
+Quit with `q` or `ctrl+c`.
+
+### Windows
+
+The release binary is a 64-bit executable. In PowerShell:
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/LuisTejedaS/texman/releases/latest/download/texman-windows-amd64.exe" -OutFile ".\texman.exe"
+.\texman.exe
+```
+
+Start it from PowerShell, Command Prompt, or Windows Terminal. SmartScreen may report an unknown publisher because the file is unsigned. Choose **More info**, then **Run anyway**.
+
+To run `texman` from any folder, put `texman.exe` in a directory already on your `PATH`, or add its folder to `PATH`. Always launch it from the directory where `collections` and `responses` should live:
+
+```powershell
+cd C:\path\to\your\texman-data
+texman.exe
+```
+
+Quit with `q` or `ctrl+c`.
+
 ## Requirements
+
+Building from source needs:
 
 - Go 1.25 or later
 - Internet access the first time dependencies are downloaded
-
-## Installation
-
-From the project root:
-
-```bash
-go mod download
-```
 
 ## Run In Development
 
