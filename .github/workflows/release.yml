@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Build binaries
+        env:
+          CGO_ENABLED: "0"
+        run: |
+          mkdir -p dist
+          GOOS=windows GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o dist/texman-windows-amd64.exe .
+          GOOS=darwin GOARCH=arm64 go build -trimpath -ldflags="-s -w" -o dist/texman-macos-arm64 .
+
+      - name: Release name
+        id: meta
+        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: build-${{ github.sha }}
+          name: Texman ${{ steps.meta.outputs.short_sha }}
+          target_commitish: ${{ github.sha }}
+          make_latest: true
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          body: |
+            Binaries from [`${{ steps.meta.outputs.short_sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) on `main`.
+
+            | File | Platform |
+            | --- | --- |
+            | `texman-windows-amd64.exe` | Windows 64-bit |
+            | `texman-macos-arm64` | macOS Apple Silicon |
+
+            On macOS, make the binary executable after download:
+
+            ```bash
+            chmod +x texman-macos-arm64
+            ./texman-macos-arm64
+            ```
+          files: |
+            dist/texman-windows-amd64.exe
+            dist/texman-macos-arm64
